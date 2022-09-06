@@ -1,6 +1,7 @@
 # @Author : Qiuyelin
 # @repo : https://github.com/pooneyy/weiban-tool
 
+import os
 import Utils
 import time
 import json
@@ -16,9 +17,16 @@ try:
         userProjectId = user['userProjectId']
         main = Utils.main(tenantCode, userId, x_token, userProjectId)
         main.init()
-        finishIdList = main.getFinishIdList()
+        try:
+            finishIdList = main.getFinishIdList()
+        except json.decoder.JSONDecodeError:
+            print('账户信息错误或已经过期，请重新获取。详见：https://github.com/pooneyy/weiban-tool')
+            break
         for i in main.getCourse():
             main.start(i)
             time.sleep(20)
             main.finish(finishIdList[i])
-except FileNotFoundError:print('未找到 config.json !')
+    os.system("pause")
+except FileNotFoundError:
+    print('未找到 config.json！详见：https://github.com/pooneyy/weiban-tool')
+    os.system("pause")

@@ -24,12 +24,18 @@
 
 ### 说明
 
-1. 首先，<a href="javascript:(function(){data=JSON.parse(localStorage.user);prompt('',JSON.stringify({token:data['token'],userId:data['userId'], tenantCode:data['tenantCode'], userProjectId: data['preUserProjectId']}));})();">请将这个链接拖入收藏夹</a>。
+1. 登录[安全微伴 (mycourse.cn)](http://weiban.mycourse.cn/#/login)，在登录后的页面上运行刚才添加进收藏夹的脚本
 
-2. 登录[安全微伴 (mycourse.cn)](http://weiban.mycourse.cn/#/login)，在登录后的页面上运行刚才添加进收藏夹的脚本
+2. 在浏览器地址栏运行
+
+   ```
+   javascript:(function(){data=JSON.parse(localStorage.user);prompt('',JSON.stringify({token:data['token'],userId:data['userId'], tenantCode:data['tenantCode'], userProjectId: data['preUserProjectId']}));})();
+   ```
+
+   浏览器地址栏如果吞掉了“`javascript:`”，请手动加上，或者你可以将上述脚本添加到收藏夹。
 
 3. 复制弹窗内的内容，**按照格式**添加到`config.json`。(格式不对会报错)
 
    [![1662441411827.png](http://png.eot.ooo/i/2022/09/06/6316d7c7f3567.png)](http://png.eot.ooo/i/2022/09/06/6316d7c7f3567.png)
-   
-4. 运行`main.exe`。
+
+4. 运行`main.py` 或者 [main.exe](https://github.com/pooneyy/weiban-tool/releases)。

@@ -2,7 +2,6 @@ import time
 import requests
 import json
 
-
 class main:
     tenantCode = 0
     userId = ""
