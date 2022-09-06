@@ -24,7 +24,7 @@
 
 ### 说明
 
-1. 首先，<a href="javascript:(function(){data=JSON.parse(localStorage.user);prompt('',JSON.stringify({token:data['token'],userId:data['userId'], tenantCode:data['tenantCode'], userProjectId: data['preUserProjectId']}));})();"><img src="https://img.shields.io/badge/%E8%AF%B7%E5%B0%86%E8%BF%99%E5%BC%A0%E5%9B%BE%E7%89%87%E6%8B%96%E5%85%A5%E6%94%B6%E8%97%8F%E5%A4%B9-informational?style=for-the-badge" /></a>
+1. 首先，<a href="javascript:(function(){data=JSON.parse(localStorage.user);prompt('',JSON.stringify({token:data['token'],userId:data['userId'], tenantCode:data['tenantCode'], userProjectId: data['preUserProjectId']}));})();">请将这个链接拖入收藏夹</a>。
 
 2. 登录[安全微伴 (mycourse.cn)](http://weiban.mycourse.cn/#/login)，在登录后的页面上运行刚才添加进收藏夹的脚本
 
