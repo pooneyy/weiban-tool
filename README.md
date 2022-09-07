@@ -2,11 +2,11 @@
 
 安全微伴自动刷课助手
 
-[原项目](https://github.com/Coaixy/weiban-tool)作者已停止维护，我在源项目基础上增加多账号的支持
+[原项目](https://github.com/Coaixy/weiban-tool)作者已停止维护，我在原项目基础上增加多账号的支持
 
-# 使用方法
+### 使用方法
 
-1. 登录[安全微伴 (mycourse.cn)](http://weiban.mycourse.cn/#/login)，在登录后的页面上运行刚才添加进收藏夹的脚本
+1. 登录[安全微伴 (mycourse.cn)](http://weiban.mycourse.cn/#/login)。
 
 2. 在浏览器地址栏运行
 
@@ -14,7 +14,9 @@
    javascript:(function(){data=JSON.parse(localStorage.user);prompt('',JSON.stringify({token:data['token'],userId:data['userId'], tenantCode:data['tenantCode'], userProjectId: data['preUserProjectId'], realName: data['realName']}));})();
    ```
 
-   浏览器地址栏如果吞掉了“`javascript:`”，请手动加上，或者你可以将上述脚本[添加到收藏夹](https://www.qiuyelin.com/getWei-banToken.html)。
+   浏览器地址栏如果吞掉了“`javascript:`”，请手动加上。
+
+   或者你可以将上述脚本[添加到收藏夹](https://www.qiuyelin.com/getWei-banToken.html)，直接在登录后的页面上运行添加进收藏夹的脚本。
 
 3. 复制弹窗内的内容，**按照格式**添加到`config.json`。(格式不对会报错)
 
@@ -36,7 +38,7 @@
       > ]
       > ```
 
-5. 运行`main.py` 或者 [main.exe](https://github.com/pooneyy/weiban-tool/releases)。.
+5. 运行`main.py` 或者 [main.exe](https://github.com/pooneyy/weiban-tool/releases)。
 
 ### 更新日志
 
