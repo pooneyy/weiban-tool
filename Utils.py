@@ -1,6 +1,7 @@
 import time
 import requests
 import json
+import asyncio
 
 class main:
     tenantCode = 0
@@ -19,6 +20,31 @@ class main:
 
     def init(self):
         self.headers['x-token'] = self.x_token
+
+    def getRealName(self):
+        url = f"https://weiban.mycourse.cn/pharos/my/getInfo.do?timestamp={int(time.time())}"
+        data = {
+            'tenantCode': self.tenantCode,
+            'userId': self.userId
+        }
+        response = requests.post(url, data=data, headers=self.headers)
+        text = response.text
+        data = json.loads(text)
+        return data['data']['realName']
+
+    def getTaskName(self):
+        url = f"https://weiban.mycourse.cn/pharos/index/listStudyTask.do?timestamp={int(time.time())}"
+        data = {
+            'tenantCode': self.tenantCode,
+            'userId': self.userId,
+            'limit': 2
+        }
+        response = requests.post(url, data=data, headers=self.headers)
+        text = response.text
+        data = json.loads(text)
+        for i in data['data']:
+            if self.userProjectId in i['userProjectId']:taskName = i['projectName']
+        return taskName
 
     def getProgress(self):
         url = "https://weiban.mycourse.cn/pharos/project/showProgress.do"
@@ -91,7 +117,7 @@ class main:
         return result
 
 
-    def start(self,courseId):
+    async def start(self,courseId):
         data = {
             'userProjectId': self.userProjectId,
             'tenantCode': self.tenantCode,
@@ -103,9 +129,9 @@ class main:
         }
         res = requests.post("https://weiban.mycourse.cn/pharos/usercourse/study.do",data=data,headers=headers)
         while json.loads(res.text)['code'] == -1:
-            time.sleep(5)
+            await asyncio.sleep(5)
             res = requests.post("https://weiban.mycourse.cn/pharos/usercourse/study.do",data=data,headers=headers)
-        print("start:"+courseId)
+        print(f"start:{courseId}\r",end='')
 
     def finish(self,finishId):
         params = {
@@ -115,4 +141,4 @@ class main:
         }
         url = "https://weiban.mycourse.cn/pharos/usercourse/finish.do"
         requests.get(url=url,params=params)
-        print("finish:"+finishId)
+        print(f"finish:{finishId}\r",end='')
