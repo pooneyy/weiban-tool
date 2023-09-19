@@ -1,5 +1,7 @@
-
+__pycache__
 build
 dist
-__pycache__
+env
+*.bat
+*.json
 *.spec
