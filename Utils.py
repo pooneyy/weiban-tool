@@ -270,12 +270,12 @@ def get_tenant_code(school_name: str) -> str:
 
 def set_accounts():
     global DEFAULT_SCHOOL_NAME
-    with open("config.json", "r+", encoding='utf8') as file:
-        try:config = json.load(file)
-        except:
-            config = {}
-            config['TrueCaptcha'] = None
-            config['Accounts'] = []
+    try:
+        with open("config.json", "r+", encoding='utf8') as file:config = json.load(file)
+    except:
+        config = {}
+        config['TrueCaptcha'] = None
+        config['Accounts'] = []
     if config.get("TrueCaptcha") is None:
         print('验证码识别使用 TrueCaptcha.org，如果你想手动识别验证码，请按 Ctrl + C')
         try:
