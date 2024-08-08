@@ -19,20 +19,21 @@ async def weibanTask(user):
     main.init()
     try:
         main.get_Project_Info()
-        taskName = main.taskName
-        print(f"开始进行 {realName} 的任务：{taskName}")
-        # 获取列表
-        for chooseType in [2,3]:
-            finishIdList = main.getFinishIdList(chooseType)
+        taskName = main.taskName # 这是一个列表
+        for i in range(len(main.userProjectId)):
+            print(f"开始进行 {realName} 的任务：{taskName[i]}")
             index = 1
-            for i in main.getCourse(chooseType):
-                print(f"{realName} 开始学习 {main.resourceNames[index]} {index} / {len(finishIdList)}")
-                await main.start(i)
-                await asyncio.sleep(random.randint(15,20))
-                main.finish(i, finishIdList[i])
-                print(f"{realName} 完成学习 {main.resourceNames[index]}")
-                index += 1
-        print(f"{id} {realName} 的任务已完成")
+            # 获取列表
+            for chooseType in [2,3]:
+                finishIdList = main.getFinishIdList(i, chooseType)
+                for courseId in main.getCourse(i, chooseType):
+                    print(f"{realName} 开始学习 {main.resourceNames[index]} {index} / {len(finishIdList)}")
+                    await main.start(i, courseId)
+                    await asyncio.sleep(random.randint(15,20))
+                    main.finish(i, courseId, finishIdList[courseId])
+                    print(f"{realName} 完成学习 {main.resourceNames[index]}")
+                    index += 1
+        print(f"\033[0;31;32m{id} {realName} 的任务已完成\033[0m")
         with open("config.json", "r+", encoding='utf8') as file:
             config = json.load(file)
             for i in config['Accounts']:
@@ -44,10 +45,11 @@ async def weibanTask(user):
             file.truncate()
             json.dump(config, file, ensure_ascii=False, indent=4)
     except json.decoder.JSONDecodeError:
-        print(f'{realName} 的账户登录态已经过期，已删除该登录态。请重新登录。')
+        print(f'\033[0;31;40m{id} {realName} 的账户登录态已经过期，已删除该登录态。请重新登录。\033[0m')
         with open("config.json", "r+", encoding='utf8') as file:
             config = json.load(file)
-            config['Accounts_login_state'] = []
+            for i in config['Accounts_login_state']:
+                if i.get('raw_id') == id:config['Accounts_login_state'].remove(i)
             file.seek(0)
             file.truncate()
             json.dump(config, file, ensure_ascii=False, indent=4)

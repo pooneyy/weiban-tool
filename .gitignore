@@ -3,5 +3,7 @@ build
 dist
 env
 *.bat
+*.sh
+*.exe
 *.json
 *.spec

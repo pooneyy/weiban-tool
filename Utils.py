@@ -16,22 +16,18 @@ DEFAULT_SCHOOL_NAME = ''
 '''这个常量的作用是暂存学校名，当同时输入的多个帐号来自同一个学校，用此避免重复地输入学校名'''
 
 class main:
-    tenantCode = 0
-    userId = ""
-    x_token = ""
-    userProjectId = ""
-    realName = ""
-    taskName = ""
-    resourceNames = ['第0项']
-    headers = {'x-token': "",
-               "User-agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Mobile Safari/537.36 Edg/103.0.1264.77"
-               }
+    headers = { 'x-token': "",
+                "User-agent": "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.5060.134 Mobile Safari/537.36 Edg/103.0.1264.77"
+            }
 
     def __init__(self, code, id, token, realName):
         self.tenantCode = code
         self.userId = id
         self.x_token = token
         self.realName = realName
+        self.userProjectId = []
+        self.taskName = []
+        self.resourceNames = ['第0项']
 
     def init(self):
         self.headers['x-token'] = self.x_token
@@ -60,50 +56,50 @@ class main:
         data = json.loads(response.text)['data']
         if len(data) <= 0:self.userProjectId = ''
         else:
-            self.userProjectId = data[0]["userProjectId"]
-            self.taskName = data[0]["projectName"]
+            self.userProjectId = [i["userProjectId"] for i in data]
+            self.taskName = [i["projectName"] for i in data]
 
-    def getRealName(self):
-        url = f"https://weiban.mycourse.cn/pharos/my/getInfo.do?timestamp={int(time.time())}"
-        data = {
-            'tenantCode': self.tenantCode,
-            'userId': self.userId
-        }
-        response = requests.post(url, data=data, headers=self.headers)
-        text = response.text
-        data = json.loads(text)
-        return data['data']['realName']
+    # def getRealName(self):
+    #     url = f"https://weiban.mycourse.cn/pharos/my/getInfo.do?timestamp={int(time.time())}"
+    #     data = {
+    #         'tenantCode': self.tenantCode,
+    #         'userId': self.userId
+    #     }
+    #     response = requests.post(url, data=data, headers=self.headers)
+    #     text = response.text
+    #     data = json.loads(text)
+    #     return data['data']['realName']
 
-    def getTaskName(self):
-        url = f"https://weiban.mycourse.cn/pharos/index/listStudyTask.do?timestamp={int(time.time())}"
-        data = {
-            'tenantCode': self.tenantCode,
-            'userId': self.userId,
-            'limit': 2
-        }
-        response = requests.post(url, data=data, headers=self.headers)
-        text = response.text
-        data = json.loads(text)
-        for i in data['data']:
-            if self.userProjectId in i['userProjectId']:taskName = i['projectName']
-        return taskName
+    # def getTaskName(self):
+    #     url = f"https://weiban.mycourse.cn/pharos/index/listStudyTask.do?timestamp={int(time.time())}"
+    #     data = {
+    #         'tenantCode': self.tenantCode,
+    #         'userId': self.userId,
+    #         'limit': 2
+    #     }
+    #     response = requests.post(url, data=data, headers=self.headers)
+    #     text = response.text
+    #     data = json.loads(text)
+    #     for i in data['data']:
+    #         if self.userProjectId in i['userProjectId']:taskName = i['projectName']
+    #     return taskName
 
-    def getProgress(self):
-        url = "https://weiban.mycourse.cn/pharos/project/showProgress.do"
-        data = {
-            'userProjectId': self.userProjectId,
-            'tenantCode': self.tenantCode,
-            'userId': self.userId
-        }
-        response = requests.post(url, data=data, headers=self.headers)
-        text = response.text
-        data = json.loads(text)
-        return data['data']['progressPet']
+    # def getProgress(self):
+    #     url = "https://weiban.mycourse.cn/pharos/project/showProgress.do"
+    #     data = {
+    #         'userProjectId': self.userProjectId,
+    #         'tenantCode': self.tenantCode,
+    #         'userId': self.userId
+    #     }
+    #     response = requests.post(url, data=data, headers=self.headers)
+    #     text = response.text
+    #     data = json.loads(text)
+    #     return data['data']['progressPet']
 
-    def getCategory(self, chooseType):
+    def getCategory(self, j, chooseType):
         url = "https://weiban.mycourse.cn/pharos/usercourse/listCategory.do"
         data = {
-            'userProjectId': self.userProjectId,
+            'userProjectId': self.userProjectId[j],
             'tenantCode': self.tenantCode,
             'userId': self.userId,
             'chooseType': chooseType
@@ -118,12 +114,12 @@ class main:
                 result.append(i['categoryCode'])
         return result
 
-    def getCourse(self, chooseType):
+    def getCourse(self, j, chooseType):
         url = "https://weiban.mycourse.cn/pharos/usercourse/listCourse.do"
         result = []
-        for i in self.getCategory(chooseType):
+        for i in self.getCategory(j ,chooseType):
             data = {
-                "userProjectId": self.userProjectId,
+                "userProjectId": self.userProjectId[j],
                 "tenantCode": self.tenantCode,
                 "userId": self.userId,
                 "chooseType": chooseType,
@@ -138,12 +134,12 @@ class main:
                     result.append(i["resourceId"])
         return result
 
-    def getFinishIdList(self, chooseType):
+    def getFinishIdList(self, j, chooseType):
         url = "https://weiban.mycourse.cn/pharos/usercourse/listCourse.do"
         result = {}
-        for i in self.getCategory(chooseType):
+        for i in self.getCategory(j, chooseType):
             data = {
-                "userProjectId": self.userProjectId,
+                "userProjectId": self.userProjectId[j],
                 "tenantCode": self.tenantCode,
                 "userId": self.userId,
                 "chooseType": chooseType,
@@ -164,9 +160,9 @@ class main:
         return result
 
 
-    async def start(self,courseId):
+    async def start(self, i, courseId):
         data = {
-            "userProjectId": self.userProjectId,
+            "userProjectId": self.userProjectId[i],
             "tenantCode": self.tenantCode,
             "userId": self.userId,
             "courseId": courseId,
@@ -186,21 +182,17 @@ class main:
             )
         print(f"start:{courseId}\r",end='')
 
-    def finish(self, courseId, finishId):
+    def finish(self, i, courseId, finishId):
         get_url_url = "https://weiban.mycourse.cn/pharos/usercourse/getCourseUrl.do"
-        finish_url = "https://weiban.mycourse.cn/pharos/usercourse/v1/{}.do"
+        finish_url = "https://weiban.mycourse.cn/pharos/usercourse/v2/{}.do"
         data = {
-            "userProjectId": self.userProjectId,
+            "userProjectId": self.userProjectId[i],
             "tenantCode": self.tenantCode,
             "userId": self.userId,
             "courseId": courseId,
         }
-        raw_data = requests.post(get_url_url, data=data, headers=self.headers)
-        url = json.loads(raw_data.text.encode().decode("unicode-escape"))["data"]
-        token = url[url.find("methodToken="): url.find("&csCom")].replace(
-            "methodToken=", ""
-        )
-        # print(token)
+        requests.post(get_url_url, data=data, headers=self.headers)
+        token = self.get_method_token(finishId)
         finish_url = finish_url.format(token)
         ts = self.__get_timestamp().replace(".", "")
         param = {
@@ -211,6 +203,30 @@ class main:
         }
         requests.get(finish_url, params=param, headers=self.headers).text
         print(f"{self.realName} Finish:{courseId}")
+
+    def get_method_token(self, course_id):
+        url = "https://weiban.mycourse.cn/pharos/usercourse/getCaptcha.do"
+        params = {
+            "userCourseId": course_id,
+            "userProjectId": self.userProjectId,
+            "userId": self.userId,
+            "tenantCode": self.tenantCode
+        }
+        text = requests.get(url, headers=self.headers, params=params).text
+        question_id = json.loads(text)['captcha']['questionId']
+        url = "https://weiban.mycourse.cn/pharos/usercourse/checkCaptcha.do"
+        params = {
+            "userCourseId": course_id,
+            "userProjectId": self.userProjectId,
+            "userId": self.userId,
+            "tenantCode": self.tenantCode,
+            "questionId": question_id
+        }
+        data = {
+            "coordinateXYs": "[{\"x\":199,\"y\":448},{\"x\":241,\"y\":466},{\"x\":144,\"y\":429}]"
+        }
+        text = requests.post(url, headers=self.headers, params=params, data=data).text
+        return json.loads(text)['data']['methodToken']
 
 def fill_key(key):
     key_size = 128

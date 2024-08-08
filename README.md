@@ -37,3 +37,7 @@
 
 - 版本 2.0 at 2023-09-18 21:57:16
   - 优化：使用账号密码登录，登录相关的代码来自[Coaixy/weiban-tool/enco.py](https://github.com/Coaixy/weiban-tool/blob/bf08fe823953afa834b49fe8d7e7a1d5abf7e605/enco.py)。
+
+- 版本 2.1 at 2024-08-08 22:18:58
+  - 优化：优化多账号。
+  - 更新：解决观看课程后的验证码，相关代码来自[Fix:Repair cannot be completed · Coaixy/weiban-tool@228d312](https://github.com/Coaixy/weiban-tool/commit/228d312c6ec2a061e60aefa2f5ecb4aedeb4307e)。
